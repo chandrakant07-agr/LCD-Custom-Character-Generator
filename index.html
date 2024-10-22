@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie-edge">
+	<title>LCD Custom Character Generator</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" 
+		rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link rel="stylesheet" href="./myStyle.css">
+</head>
+<body>
+	<div class="container-fluid mt-3">
+		<canvas id="pixelCanvas" width="1280" height="640"></canvas>
+		<div class="btn">
+			<button id="clear" class="btn btn-danger">Clear</button>
+		</div>
+		<div id="showBitValue" class="">
+			<!-- <span>_</span> -->
+			<div id="head" class="head p-2 pt-3" draggable="true">
+				<h4>Bit Values</h4>
+			</div>
+			<div id="field" class="d-flex py-3 ps-3"></div>
+		</div>
+	</div>
+
+	<script src="./myScript.js"></script>
+	<script type="text/javascript">
+		createBitsMap();
+
+		const field = document.getElementById('field');
+
+		for(let i=0; i<8; i++) {
+			const bitSet = document.createElement('p');
+			bitSet.id = `bitSet${i}`;
+			bitSet.className = "bitSet";
+			field.appendChild(bitSet);
+
+			for(let j=0; j<128; j++) {
+				const bits = document.createElement('span');
+				bits.id = `bits${j}`;
+				bits.innerText = '0x00';
+				bitSet.appendChild(bits);
+			}
+		}
+
+		function resetBitValue() {
+			let bitSet, bits;
+
+			for(let i=0; i<8; i++) {
+				let bitSet = field.children[i];
+				for(let j=0; j<128; j++) {
+					bits = bitSet.children[j];
+					bits.innerHTML = '0x00';
+					bits.style.removeProperty('background-color');
+				}
+			}
+		}
+
+		const btn = document.getElementById('clear');
+
+		btn.addEventListener("click", () => {
+			resetBitValue();
+			createBitsMap()
+			pixel = []
+		});
+
+	</script>
+</body>
+</html>
