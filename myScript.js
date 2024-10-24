@@ -45,6 +45,9 @@ function isPixelSet(x, y) {
 canvas.addEventListener("click", (e) => {
 	let Xoffset = Math.floor(e.offsetX/cells_width);
 	let Yoffset = Math.floor(e.offsetY/cells_height);
+	
+	if(Xoffset == -1 || Xoffset == 128)
+		return 0;
 
 	if(isPixelSet(Xoffset, Yoffset)) {
 		setPixel(Xoffset, Yoffset, "#81c784");
