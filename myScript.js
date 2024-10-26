@@ -42,13 +42,7 @@ function isPixelSet(x, y) {
 	return false;
 }
 
-canvas.addEventListener("click", (e) => {
-	let Xoffset = Math.floor(e.offsetX/cells_width);
-	let Yoffset = Math.floor(e.offsetY/cells_height);
-	
-	if(Xoffset == -1 || Xoffset == 128)
-		return 0;
-
+function pixelMapping(Xoffset, Yoffset) {
 	if(isPixelSet(Xoffset, Yoffset)) {
 		setPixel(Xoffset, Yoffset, "#81c784");
 		drawPixelCells(Xoffset, Yoffset);
@@ -56,7 +50,16 @@ canvas.addEventListener("click", (e) => {
 		pixel.push({Xoffset, Yoffset});
 		setPixel(Xoffset, Yoffset, "#1B5E20");
 	}
+}
 
+canvas.addEventListener("click", (e) => {
+	let Xoffset = Math.floor(e.offsetX/cells_width);
+	let Yoffset = Math.floor(e.offsetY/cells_height);
+
+	if(Xoffset == -1 || Xoffset == 128)
+		return 0;
+
+	pixelMapping(Xoffset, Yoffset);
 	resetBitValue();
 	readBits();
 });
@@ -107,11 +110,11 @@ function writeBitsValue(bitSetId, XaxisBit, YaxisBit) {
 	bitSet = document.getElementById(`bitSet${bitSetId}`);
 	childs = bitSet.children[XaxisBit];
 
-	readValue = childs.innerHTML;
+	readValue = childs.value;
 	numValue = parseInt(readValue, 16);
 	hexString = (128>>(YaxisBit%8))+numValue;
 	hexString = hexString.toString(16);
 
-	childs.innerHTML = `0x${hexString}`;
+	childs.value = `0x${hexString}`;
 	childs.style.backgroundColor = "#e6ee9c";
 }

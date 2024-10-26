@@ -21,7 +21,7 @@
 			<div id="head" class="head p-2 pt-3" draggable="true">
 				<h4>Bit Values</h4>
 			</div>
-			<div id="field" class="d-flex py-3 ps-3"></div>
+			<div id="field" class="d-flex py-3 ps-2"></div>
 		</div>
 	</div>
 
@@ -38,9 +38,11 @@
 			field.appendChild(bitSet);
 
 			for(let j=0; j<128; j++) {
-				const bits = document.createElement('span');
+				const bits = document.createElement('input');
+				bits.setAttribute("type", "text");
+				bits.setAttribute("readonly", true);
 				bits.id = `bits${j}`;
-				bits.innerText = '0x00';
+				bits.value = '0x00';
 				bitSet.appendChild(bits);
 			}
 		}
@@ -52,7 +54,7 @@
 				let bitSet = field.children[i];
 				for(let j=0; j<128; j++) {
 					bits = bitSet.children[j];
-					bits.innerHTML = '0x00';
+					bits.value = '0x00';
 					bits.style.removeProperty('background-color');
 				}
 			}
@@ -65,6 +67,38 @@
 			createBitsMap()
 			pixel = []
 		});
+
+		for(let i=0; i<8; i++) {
+			const bitSets = document.getElementById(`bitSet${i}`);
+			const yRange = ((i+1)*8)-1;
+
+			for(let j=0; j<128; j++) {
+				const bits = bitSets.children[`bits${j}`];
+
+				bits.addEventListener("dblclick", () => {
+					bits.removeAttribute("readonly");
+					bits.style.outline = "auto";
+				});
+
+				bits.addEventListener("focusout", () => {
+					bits.setAttribute("readonly", true);
+					bits.style.outline = "none";
+
+					for(let k=0; k<8; k++) {
+						const oneBit = ((255&bits.value)>>k)&1;
+						const Xoffset = j;
+						const Yoffset = yRange-k;
+
+						if(oneBit == 1) {
+							pixelMapping(Xoffset, Yoffset);
+							
+						}
+					}
+					resetBitValue();
+					readBits();
+				});
+			}
+		}
 
 	</script>
 </body>
